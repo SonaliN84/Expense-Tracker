@@ -4,6 +4,10 @@ import React,{useState} from 'react';
     isLoggedIn:false,
     login:(token)=>{},
     logout:()=>{},
+    profilePhotoUrl:'',
+    ProfileName:'',
+    setProfileName:()=>{},
+    setprofilePhotoUrl:()=>{}
     // userEmail:'',
     // setUserEmail:()=>{},
     // data:[],
@@ -13,6 +17,9 @@ import React,{useState} from 'react';
  export const AuthContextProvider=(props)=>{
     const initialToken=localStorage.getItem('token')
     const [token,setToken]=useState(initialToken);
+
+    const [ProfileName,setProfileName]=useState('');
+    const [profilePhotoUrl,setprofilePhotoUrl]=useState('')
     // const [userEmail,setUserEmail]=useState('');
     // const [data,setData]=useState([]);
 
@@ -37,10 +44,15 @@ import React,{useState} from 'react';
         isLoggedIn:userIsLoggedIn,
         login:loginHandler,
         logout:logoutHandler,
+        profilePhotoUrl:profilePhotoUrl,
+        ProfileName:ProfileName,
+        setProfileName:setProfileName,
+        setprofilePhotoUrl:setprofilePhotoUrl
         // userEmail:userEmail,
         // setUserEmail:setUserEmail,
         // data:data,
         // setData:setData,
+
     
     }
     return (
