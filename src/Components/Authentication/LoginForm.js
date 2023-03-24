@@ -1,12 +1,14 @@
 import {Form,Button} from 'react-bootstrap';
 import './AuthForm.css';
-import { useRef } from 'react';
+import { useRef,useContext} from 'react';
 import { useHistory } from 'react-router-dom';
+import AuthContext from '../../Store/auth-context';
+
 const LoginForm=()=>{
     const history=useHistory();
     const emailInputRef=useRef();
     const passwordInputRef=useRef();
-    
+     const authCtx=useContext(AuthContext)
 
     const submitHandler=(event)=>{
       event.preventDefault();
@@ -30,10 +32,7 @@ const LoginForm=()=>{
         .then((response)=>{
             if(response.ok)
             {
-                return response.json().then((res)=>{
-                    console.log("User has been succesfully logged in")
-                    history.replace('/')
-                })
+                return response.json()
                 
             }
             else{
@@ -42,6 +41,11 @@ const LoginForm=()=>{
                 throw new Error(errorMessage)
                 })
             }
+        })
+        .then((data)=>{
+            authCtx.login(data.idToken);
+            history.replace('/Users')
+            console.log("user has been logged in")
         })
         .catch((err)=>{
             alert(err.message)

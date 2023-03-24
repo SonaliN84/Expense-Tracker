@@ -1,7 +1,14 @@
 import {Nav,Navbar,Container} from 'react-bootstrap';
 import { NavLink,Link } from 'react-router-dom';
-import './Header.css'
+import './Header.css';
+import AuthContext from '../../Store/auth-context';
+import { useContext } from 'react';
 const Header=()=>{
+   const authCtx=useContext(AuthContext)
+   const logoutHandler=()=>{
+    authCtx.logout();
+    
+  }
    return( 
    <Navbar bg="primary" variant="dark" >
    
@@ -11,11 +18,18 @@ const Header=()=>{
         <Nav.Link href="#features">About</Nav.Link>
         <Nav.Link href="#pricing">Contact us</Nav.Link>
       </Nav>
+      {!authCtx.isLoggedIn && (
       <Nav >
           <Nav.Link><NavLink to='/Login' className='loginSignupTitles'>Login</NavLink></Nav.Link>
           <Nav.Link> <Link to='/SignUp' className='me-4 loginSignupTitles'>Sign Up</Link></Nav.Link>
 
      </Nav>
+      )}
+      {authCtx.isLoggedIn && (
+      <Nav >
+          <Nav.Link><NavLink to='/Login' className='loginSignupTitles me-4' onClick={logoutHandler}>Logout</NavLink></Nav.Link>
+      </Nav>
+      )}
     
   </Navbar>)
 }
