@@ -1,9 +1,22 @@
-
+import {Switch,Route} from 'react-router-dom';
 import './App.css';
-import AuthForm from './Components/Authentication/AuthForm';
+import SignUp from './pages/SignUp';
+import Login from './pages/Login';
+import RootLayout from './pages/RootLayout';
 function App() {
   return (
-   <AuthForm/>
+   
+   <RootLayout>
+   <Switch>
+    
+    <Route path='/SignUp'>
+      <SignUp/>
+    </Route>
+    <Route path='/Login'>
+      <Login/>
+    </Route>
+   </Switch>
+   </RootLayout>
   );
 }
 

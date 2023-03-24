@@ -1,0 +1,11 @@
+.loginSignupTitles{
+    text-decoration: none;
+    background-color: #0000B9;
+    color: white;
+    border:1px solid #0000B9;
+    border-radius:15px;
+    padding:5px 20px;
+}
+.loginSignupTitles:hover{
+    color:white;
+}
