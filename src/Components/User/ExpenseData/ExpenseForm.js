@@ -2,7 +2,7 @@ import {Form,Col,Row,Button} from 'react-bootstrap';
 import './ExpenseForm.css';
 import {useState,useContext,useRef} from 'react';
 import ExpenseContext from '../../../Store/expense-context';
-
+import axios from 'axios'
 const ExpenseForm=()=>{
    const inputAmountRef=useRef('')
    const inputDescriptionRef=useRef('')
@@ -15,7 +15,7 @@ const ExpenseForm=()=>{
     }
     const submitFormHandler=(event)=>{
         event.preventDefault();
-       
+       console.log("hi",expCtx.expenses)
         const enteredAmount=inputAmountRef.current.value
         const enteredDescription=inputDescriptionRef.current.value
         const enteredCategory=inputCategoryRef.current.value
@@ -25,9 +25,36 @@ const ExpenseForm=()=>{
             description:enteredDescription,
             category:enteredCategory
         }
-        expCtx.setExpenses((prev)=>{
-            return [...prev,expense]
+         
+        let newExpense=JSON.stringify(expense)
+
+        axios.post('https://expense-tracker-c62f3-default-rtdb.firebaseio.com/expenses.json',newExpense)
+        .then((response)=>{
+            console.log(response.data)
+            axios.get('https://expense-tracker-c62f3-default-rtdb.firebaseio.com/expenses.json')
+            .then((response)=>{
+                console.log(response)
+                console.log(response.data)
+                let array=[];
+                Object.keys(response.data).forEach((key)=>{
+                    let obj={
+                        id:key,
+                        amount:response.data[key].amount,
+                        description:response.data[key].description,
+                        category:response.data[key].category
+                    }
+                    array.push(obj)
+                    
+                    
+                    console.log(obj)
+                })
+                expCtx.setExpenses(array)
+            })
         })
+
+
+
+        
     }
     const closeExpenseFormHandler=()=>{
         setIsForm(false) 

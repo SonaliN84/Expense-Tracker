@@ -4,17 +4,20 @@ import { useContext } from 'react';
 import ExpenseItem from './ExpenseItem';
 const ExpenseData=()=>{
     const expCtx=useContext(ExpenseContext);
-
+   
   return(
-    <div className="expense-">
+    <div className="expense-data">
     <div className="text-center">
-    {
-      expCtx.expenses.map((item)=>(
+   
+
+     
+
+      {expCtx.expenses.map((item)=>(
         <ExpenseItem amount={item.amount} description={item.description} category={item.category}/>
-      ))
-    }
+      ))}
+      </div>
     </div>
-    </div>
+   
   )
 }
 export default ExpenseData;
