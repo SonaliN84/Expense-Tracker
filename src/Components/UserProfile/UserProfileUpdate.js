@@ -1,12 +1,14 @@
 import {Form,Button,Row,Col} from 'react-bootstrap'
 import './UserProfile.css';
-import { useRef,useContext } from 'react';
+import { useRef,useContext, Fragment } from 'react';
 import AuthContext from '../../Store/auth-context';
+
 const UserProfileUpdate=()=>{
     const authCtx=useContext(AuthContext)
     console.log(authCtx.ProfileName)
     const inputNameRef=useRef('');
     const inputPhotoUrlRef=useRef('')
+    const inputVerificationCode=useRef('')
   
     const FormSubmitHandler=(event)=>{
         event.preventDefault();
@@ -51,9 +53,53 @@ const UserProfileUpdate=()=>{
       
     }
 
+    const VerifyEmailHandler=()=>{
+      let url='https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyChjskkFF5ut3_qondDFsUOAko7B8HCDv0';
+       fetch(url,{
+           method:'POST',
+           body:JSON.stringify({
+            requestType: "VERIFY_EMAIL",
+            idToken:authCtx.token,
+            
+             }),
+             headers:{
+               'Content-Type':'application/json'
+             }
+       })
+       .then((response)=>{
+           if(response.ok)
+           {
+               return response.json()
+               
+           }
+           else{
+               return response.json().then((data)=>{
+                console.log(data)
+               let errorMessage='Authentication failed';
+               throw new Error(errorMessage)
+               })
+           }
+       })
+       .then((data)=>{
+        console.log(data);
+        alert("Verification email has been sent to your account")
+       })
+       .catch((err)=>{
+           alert(err.message)
+       })
+    }
+  
+  
   return (
-    <Form className='profile-form' onSubmit={FormSubmitHandler}>
-      
+      <Fragment>
+      <div className='profile-form'>
+       <h5 className='mb-4'>Verify your Email id</h5>
+       <Button onClick={VerifyEmailHandler}  className='mb-2'>Verify Email</Button>
+       
+      </div>
+
+      <Form className='profile-form' onSubmit={FormSubmitHandler}>
+        <h3>Enter contact details:</h3>
         <Form.Group controlId="formGridName">
           <Form.Label>Full Name</Form.Label>
           <Form.Control type="text"  placeholder="Enter Name" className='mb-2' ref={inputNameRef} defaultValue={authCtx.ProfileName}/>
@@ -61,7 +107,7 @@ const UserProfileUpdate=()=>{
 
         <Form.Group  controlId="formGridphoto">
           <Form.Label>Profile Photo URL</Form.Label>
-          <Form.Control type="password" placeholder="Enter URL" className='mb-3' ref={inputPhotoUrlRef} defaultValue={authCtx.profilePhotoUrl} />
+          <Form.Control type="text" placeholder="Enter URL" className='mb-3' ref={inputPhotoUrlRef} defaultValue={authCtx.profilePhotoUrl} />
         </Form.Group>
      
       
@@ -69,6 +115,7 @@ const UserProfileUpdate=()=>{
         Update
       </Button>
       </Form>
+      </Fragment>
   )
 }
 export default UserProfileUpdate;

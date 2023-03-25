@@ -27,7 +27,8 @@ const Header=()=>{
       )}
       {authCtx.isLoggedIn && (
       <Nav >
-          <Nav.Link><NavLink to='/Login' className='loginSignupTitles me-4' onClick={logoutHandler}>Logout</NavLink></Nav.Link>
+          <Nav.Link><NavLink to='/Login' className='loginSignupTitles me-2' onClick={logoutHandler}>Logout</NavLink></Nav.Link>
+          <Nav.Link><NavLink to='/ProfileUpdate' className='loginSignupTitles me-4'>Verify Email</NavLink></Nav.Link>
       </Nav>
       )}
     
