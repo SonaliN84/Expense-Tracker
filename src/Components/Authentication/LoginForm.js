@@ -1,7 +1,7 @@
 import {Form,Button} from 'react-bootstrap';
 import './AuthForm.css';
 import { useRef,useContext} from 'react';
-import { useHistory } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 import AuthContext from '../../Store/auth-context';
 
 const LoginForm=()=>{
@@ -64,11 +64,11 @@ const LoginForm=()=>{
     
       </Form.Group>
 
-      <Form.Group className="mb-4" controlId="formBasicPassword">
+      <Form.Group className="mb-2" controlId="formBasicPassword">
         <Form.Label>Password</Form.Label>
         <Form.Control type="password" placeholder="Password" required ref={passwordInputRef}/>
       </Form.Group>
-
+      <NavLink to='/Forgot_Password' className="mb-3" style={{textAlign:"center",textDecoration:"none"}}>Forgot password</NavLink>
       <Button variant="primary" type="submit" >
         Submit
       </Button>

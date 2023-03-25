@@ -7,9 +7,11 @@ import ProfileUpdate from './pages/ProfileUpdate';
 import RootLayout from './pages/RootLayout';
 import { useEffect,useContext } from 'react';
 import AuthContext from './Store/auth-context';
+import Forgot_Password from './pages/Forgot_Password';
 function App() {
 const authCtx=useContext(AuthContext)
 useEffect(()=>{
+  if(authCtx.isLoggedIn){
   let url='https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyChjskkFF5ut3_qondDFsUOAko7B8HCDv0';
   fetch(url,{
       method:'POST',
@@ -45,6 +47,7 @@ useEffect(()=>{
   .catch((err)=>{
       alert(err.message)
   })
+}
 },[])
 
 
@@ -65,6 +68,9 @@ useEffect(()=>{
     </Route>
     <Route path='/ProfileUpdate'>
       <ProfileUpdate/>
+    </Route>
+    <Route path='/Forgot_Password'>
+      <Forgot_Password/>
     </Route>
    </Switch>
    </RootLayout>
