@@ -1,6 +1,8 @@
 import { Fragment } from "react";
 import './User.css';
 import {Link} from 'react-router-dom'
+import ExpenseForm from "./ExpenseData/ExpenseForm";
+import ExpenseData from "./ExpenseData/ExpenseData";
 const User=()=>{
   return (
     <Fragment>
@@ -12,6 +14,10 @@ const User=()=>{
     <div>
     <h3 style={{margin:"10px"}}>Welcome to Expense Tracker</h3>
     </div>
+    <ExpenseForm/>
+    <ExpenseData/>
+  
+
     </Fragment>
   )
 }

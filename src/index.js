@@ -8,15 +8,18 @@ import { BrowserRouter } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
 import '../node_modules/react-bootstrap/dist/react-bootstrap'
 import '../node_modules/bootstrap/dist/css/bootstrap.css'
+import { ExpenseContextProvider } from './Store/expense-context';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
+  <ExpenseContextProvider>
   <AuthContextProvider>
    <BrowserRouter>
 
     <App />
   </BrowserRouter>
   </AuthContextProvider>
+  </ExpenseContextProvider>
   </React.StrictMode>
 );
 
