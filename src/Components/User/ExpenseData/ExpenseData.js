@@ -13,7 +13,7 @@ const ExpenseData=()=>{
      
 
       {expCtx.expenses.map((item)=>(
-        <ExpenseItem amount={item.amount} description={item.description} category={item.category}/>
+        <ExpenseItem amount={item.amount} description={item.description} category={item.category} id={item.id}/>
       ))}
       </div>
     </div>
