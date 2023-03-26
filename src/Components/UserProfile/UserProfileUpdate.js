@@ -1,26 +1,33 @@
 import {Form,Button,Row,Col} from 'react-bootstrap'
 import './UserProfile.css';
 import { useRef,useContext, Fragment } from 'react';
-import AuthContext from '../../Store/auth-context';
+// import AuthContext from '../../Store/auth-context';
+import { useSelector } from 'react-redux';
+import { authActions } from '../../Store/auth-slice';
 
 const UserProfileUpdate=()=>{
-    const authCtx=useContext(AuthContext)
-    console.log(authCtx.ProfileName)
+    // const authCtx=useContext(AuthContext)
+    const authProfileName=useSelector(state=>state.auth.ProfileName)
+    const authprofilePhotoUrl=useSelector(state=>state.auth.profilePhotoUrl)
+    const authToken=useSelector(state=>state.auth.token)
+    console.log(authToken)
+    // console.log(authCtx.ProfileName)
     const inputNameRef=useRef('');
     const inputPhotoUrlRef=useRef('')
-    const inputVerificationCode=useRef('')
+    
   
     const FormSubmitHandler=(event)=>{
         event.preventDefault();
        const enteredName=inputNameRef.current.value;
        const enteredPhotoUrl=inputPhotoUrlRef.current.value;
-
+      console.log(authToken)
        
        let url='https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyChjskkFF5ut3_qondDFsUOAko7B8HCDv0';
        fetch(url,{
            method:'POST',
            body:JSON.stringify({
-            idToken:authCtx.token,
+            // idToken:authCtx.token,
+            idToken:authToken,
             displayName:enteredName,
             photoUrl:enteredPhotoUrl,
             returnSecureToken:false
@@ -59,7 +66,7 @@ const UserProfileUpdate=()=>{
            method:'POST',
            body:JSON.stringify({
             requestType: "VERIFY_EMAIL",
-            idToken:authCtx.token,
+            idToken:authToken,
             
              }),
              headers:{
@@ -102,12 +109,12 @@ const UserProfileUpdate=()=>{
         <h3>Enter contact details:</h3>
         <Form.Group controlId="formGridName">
           <Form.Label>Full Name</Form.Label>
-          <Form.Control type="text"  placeholder="Enter Name" className='mb-2' ref={inputNameRef} defaultValue={authCtx.ProfileName}/>
+          <Form.Control type="text"  placeholder="Enter Name" className='mb-2' ref={inputNameRef} defaultValue={authProfileName}/>
         </Form.Group>
 
         <Form.Group  controlId="formGridphoto">
           <Form.Label>Profile Photo URL</Form.Label>
-          <Form.Control type="text" placeholder="Enter URL" className='mb-3' ref={inputPhotoUrlRef} defaultValue={authCtx.profilePhotoUrl} />
+          <Form.Control type="text" placeholder="Enter URL" className='mb-3' ref={inputPhotoUrlRef} defaultValue={authprofilePhotoUrl} />
         </Form.Group>
      
       

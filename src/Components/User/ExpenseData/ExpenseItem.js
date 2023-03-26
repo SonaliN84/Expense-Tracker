@@ -2,10 +2,12 @@ import {Row,Col, Button} from 'react-bootstrap';
 import './ExpenseItem.css';
 import axios from 'axios';
 import { useContext } from 'react';
-import ExpenseContext from '../../../Store/expense-context';
+// import ExpenseContext from '../../../Store/expense-context';
+import { useDispatch } from 'react-redux';
+import { expenseActions } from '../../../Store/expense-slice';
 const ExpenseItem=(props)=>{
-    const expCtx=useContext(ExpenseContext)
-    
+    // const expCtx=useContext(ExpenseContext)
+    const dispatch=useDispatch();
     const deleteExpenseHandler=()=>{
         axios.delete(`https://expense-tracker-c62f3-default-rtdb.firebaseio.com/expenses/${props.id}.json`)
         .then(()=>{
@@ -29,20 +31,20 @@ const ExpenseItem=(props)=>{
                     console.log(obj)
                 })
             }
-                expCtx.setExpenses(array)
+                dispatch(expenseActions.setExpenses(array))
             })
         })
     }
 
     const editExpenseHandler=()=>{
-      expCtx.setIsForm(true)
-      expCtx.setIsEdit(true); 
-      expCtx.setEditExpense( {
+      dispatch(expenseActions.setIsForm(true))
+      dispatch(expenseActions.setIsEdit(true)); 
+      dispatch(expenseActions.setEditExpense( {
         id:props.id,
         amount:props.amount,
         description:props.description,
         category:props.category
-     })
+     }))
 
 
 

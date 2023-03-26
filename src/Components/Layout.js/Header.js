@@ -1,14 +1,24 @@
-import {Nav,Navbar,Container} from 'react-bootstrap';
+import {Nav,Navbar,Container,Button} from 'react-bootstrap';
 import { NavLink,Link } from 'react-router-dom';
 import './Header.css';
-import AuthContext from '../../Store/auth-context';
-import { useContext } from 'react';
+import { useDispatch,useSelector } from 'react-redux';
+import { authActions } from '../../Store/auth-slice';
+// import AuthContext from '../../Store/auth-context';
+// import { useContext } from 'react';
 const Header=()=>{
-   const authCtx=useContext(AuthContext)
+  const dispatch=useDispatch();
+  const authIsLoggedIn =useSelector(state=>state.auth.isLoggedIn)
+  const expData=useSelector(state=>state.expense.expenses)
+  console.log()
+  //  const authCtx=useContext(AuthContext)
    const logoutHandler=()=>{
-    authCtx.logout();
+   dispatch(authActions.logout());
     
   }
+
+  const totalExpenseAmount=expData.reduce((curNumber,item)=>{
+    return curNumber+Number.parseInt(item.amount);
+ },0)
    return( 
    <Navbar bg="primary" variant="dark" >
    
@@ -18,17 +28,18 @@ const Header=()=>{
         <Nav.Link href="#features">About</Nav.Link>
         <Nav.Link href="#pricing">Contact us</Nav.Link>
       </Nav>
-      {!authCtx.isLoggedIn && (
+      {!authIsLoggedIn && (
       <Nav >
           <Nav.Link><NavLink to='/Login' className='loginSignupTitles'>Login</NavLink></Nav.Link>
           <Nav.Link> <Link to='/SignUp' className='me-4 loginSignupTitles'>Sign Up</Link></Nav.Link>
 
      </Nav>
       )}
-      {authCtx.isLoggedIn && (
+      {authIsLoggedIn && (
       <Nav >
           <Nav.Link><NavLink to='/Login' className='loginSignupTitles me-2' onClick={logoutHandler}>Logout</NavLink></Nav.Link>
-          <Nav.Link><NavLink to='/ProfileUpdate' className='loginSignupTitles me-4'>Verify Email</NavLink></Nav.Link>
+          <Nav.Link><NavLink to='/ProfileUpdate' className='loginSignupTitles me-2'>Verify Email</NavLink></Nav.Link>
+          {totalExpenseAmount>10000 ? <Button style={{backgroundColor:"#7C3E66"}} className='mx-2'>Activate Premium</Button>:""}
       </Nav>
       )}
     

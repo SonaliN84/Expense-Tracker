@@ -1,14 +1,17 @@
 import {Form,Button} from 'react-bootstrap';
 import './AuthForm.css';
-import { useRef,useContext} from 'react';
+import { useRef} from 'react';
 import { NavLink, useHistory } from 'react-router-dom';
-import AuthContext from '../../Store/auth-context';
+
+import { useDispatch } from 'react-redux';
+import { authActions } from '../../Store/auth-slice';
 
 const LoginForm=()=>{
+    const dispatch=useDispatch();
     const history=useHistory();
     const emailInputRef=useRef();
     const passwordInputRef=useRef();
-     const authCtx=useContext(AuthContext)
+    //  const authCtx=useContext(AuthContext)
 
     const submitHandler=(event)=>{
       event.preventDefault();
@@ -43,7 +46,9 @@ const LoginForm=()=>{
             }
         })
         .then((data)=>{
-            authCtx.login(data.idToken);
+          console.log("login",data.idToken)
+            // authCtx.login(data.idToken);
+            dispatch(authActions.login(data.idToken));
             history.replace('/Users')
             console.log("user has been logged in")
         })

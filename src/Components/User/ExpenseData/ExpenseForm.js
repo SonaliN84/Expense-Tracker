@@ -1,34 +1,42 @@
 import {Form,Col,Row,Button} from 'react-bootstrap';
 import './ExpenseForm.css';
 import {useState,useContext,useRef} from 'react';
-import ExpenseContext from '../../../Store/expense-context';
+import { useSelector,useDispatch } from 'react-redux';
+import { expenseActions } from '../../../Store/expense-slice';
+// import ExpenseContext from '../../../Store/expense-context';
 import axios from 'axios'
 const ExpenseForm=()=>{
+    const dispatch=useDispatch();
+    const expIsEdit=useSelector(state=>state.expense.isEdit);
+    const expIsForm=useSelector(state=>state.expense.isForm);
+    const expEditExpense=useSelector(state=>state.expense.editExpense);
    const inputAmountRef=useRef('')
    const inputDescriptionRef=useRef('')
    const inputCategoryRef=useRef('')
-   const expCtx=useContext(ExpenseContext)
+//    const expCtx=useContext(ExpenseContext)
 
     
     const openExpenseFormHandler=()=>{
-        expCtx.setIsForm(true)
+        dispatch(expenseActions.setIsForm(true))
+        // expCtx.setIsForm(true)
     }
     const submitFormHandler=(event)=>{
         event.preventDefault();
-        console.log(expCtx.editExpense.description)
-        console.log("hey",expCtx.editExpense)
+        // console.log(expCtx.editExpense.description)
+        // console.log("hey",expCtx.editExpense)
         const enteredAmount=inputAmountRef.current.value
         const enteredDescription=inputDescriptionRef.current.value
         const enteredCategory=inputCategoryRef.current.value
 
         let expense={
+            
             amount:enteredAmount,
             description:enteredDescription,
             category:enteredCategory
         }
          
         let newExpense=JSON.stringify(expense)
-        if(!expCtx.isEdit){
+        if(!expIsEdit){
         axios.post('https://expense-tracker-c62f3-default-rtdb.firebaseio.com/expenses.json',newExpense)
         .then((response)=>{
             console.log(response.data)
@@ -36,7 +44,8 @@ const ExpenseForm=()=>{
             .then((response)=>{
                 console.log(response)
                 console.log(response.data)
-                expCtx.setIsForm(false)
+                dispatch(expenseActions.setIsForm(false))
+                dispatch(expenseActions.setIsForm(false))
                 let array=[];
                 Object.keys(response.data).forEach((key)=>{
                     let obj={
@@ -50,18 +59,22 @@ const ExpenseForm=()=>{
                     
                     console.log(obj)
                 })
-                expCtx.setExpenses(array)
+               dispatch(expenseActions.setExpenses(array))
+                // expCtx.setExpenses(array)
             })
         })
 
     }
     else{
-        let id=expCtx.editExpense.id
+        let id=expEditExpense.id
         axios.put(`https://expense-tracker-c62f3-default-rtdb.firebaseio.com/expenses/${id}.json`,expense)
         .then(()=>{
-            expCtx.setIsEdit(false);
-            
-            expCtx.setIsForm(false)
+            // expCtx.setIsEdit(false);
+             dispatch(expenseActions.setIsEdit(false))
+           dispatch(expenseActions.setEditExpense({}))
+            // expCtx.setEditExpense({})
+           dispatch(expenseActions.setIsForm(false))
+            // expCtx.setIsForm(false)
             axios.get('https://expense-tracker-c62f3-default-rtdb.firebaseio.com/expenses.json')
             .then((response)=>{
                 console.log(response)
@@ -79,7 +92,8 @@ const ExpenseForm=()=>{
                     
                     console.log(obj)
                 })
-                expCtx.setExpenses(array)
+                // expCtx.setExpenses(array)
+                dispatch(expenseActions.setExpenses(array))
             })
         })  
     }
@@ -87,25 +101,32 @@ const ExpenseForm=()=>{
         
     }
     const closeExpenseFormHandler=()=>{
-        expCtx.setIsForm(false) 
+        // expCtx.setIsForm(false);
+         dispatch(expenseActions.setIsForm(false));
+
+       dispatch(expenseActions.setIsEdit(false));
+        // expCtx.setIsEdit(false);
+        
+        dispatch(expenseActions.setEditExpense({}))
+        // expCtx.setEditExpense({}) 
     }
  return(
     <div className='expense-form'>
-   {!expCtx.isForm && <div className='d-flex justify-content-center align-items-center'>
+   {!expIsForm && <div className='d-flex justify-content-center align-items-center'>
         <Button onClick={openExpenseFormHandler}>Add Expense</Button>
     </div>}
-    {expCtx.isForm && <Form onSubmit={submitFormHandler}>
+    {expIsForm && <Form onSubmit={submitFormHandler}>
     <Row>
       <Col>
-        <Form.Control placeholder="Description" className='mx-2 my-4' ref={inputDescriptionRef} required defaultValue={expCtx.editExpense.description}/>
+        <Form.Control placeholder="Description" className='mx-2 my-4' ref={inputDescriptionRef} required defaultValue={expEditExpense.description}/>
       </Col>
       <Col>
-        <Form.Control placeholder="Amount" className='my-4' ref={inputAmountRef} required defaultValue={expCtx.editExpense.amount}/>
+        <Form.Control placeholder="Amount" className='my-4' ref={inputAmountRef} required defaultValue={expEditExpense.amount}/>
       </Col>
     </Row>
     <Row >
       <Col>
-      <Form.Select aria-label="Default select example"className='mx-2' ref={inputCategoryRef} >
+      <Form.Select aria-label="Default select example"className='mx-2' ref={inputCategoryRef} defaultValue={expEditExpense.category} >
       <option value="Fuel">Fuel</option>
       <option value="Food">Food</option>
       <option value="Electricity">Electricity</option>
@@ -119,8 +140,8 @@ const ExpenseForm=()=>{
     <Col ></Col>
     <Col className='d-flex flex-row-reverse'>
       
-      {!expCtx.isEdit && <Button type="submit">submit</Button>}
-      {expCtx.isEdit && <Button type="submit">Update</Button>}
+      {!expIsEdit && <Button type="submit">submit</Button>}
+      {expIsEdit && <Button type="submit">Update</Button>}
       <Button onClick={closeExpenseFormHandler} className="mx-2">cancel</Button>
       
 
