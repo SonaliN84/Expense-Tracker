@@ -14,8 +14,11 @@ import axios from 'axios';
 // import ExpenseContext from './Store/expense-context';
 import { useSelector,useDispatch } from 'react-redux';
 import { authActions } from './Store/auth-slice';
+
 function App() {
-// const authCtx=useContext(AuthContext)
+  // const authCtx=useContext(AuthContext)
+const theme=useSelector(state=>state.theme.theme)
+// console.log(theme)
 const dispatch=useDispatch();
 const authToken=useSelector(state=>state.auth.token)
 const authIsLoggedIn=useSelector(state=>state.auth.isLoggedIn)
@@ -81,11 +84,14 @@ useEffect(()=>{
             })
 }
 },[])
-
+ useEffect(() => {
+   const theme=localStorage.getItem('theme')
+      document.body.className = theme;
+    }, [theme]);
 
 
   return (
-   
+   <div>
    <RootLayout>
    <Switch>
     
@@ -106,6 +112,7 @@ useEffect(()=>{
     </Route>
    </Switch>
    </RootLayout>
+   </div>
   );
 }
 

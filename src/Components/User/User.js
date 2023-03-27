@@ -3,6 +3,7 @@ import './User.css';
 import {Link} from 'react-router-dom'
 import ExpenseForm from "./ExpenseData/ExpenseForm";
 import ExpenseData from "./ExpenseData/ExpenseData";
+import DownloadExpense from "./ExpenseData/DownloadExpense";
 const User=()=>{
   return (
     <Fragment>
@@ -16,7 +17,7 @@ const User=()=>{
     </div>
     <ExpenseForm/>
     <ExpenseData/>
-  
+    <DownloadExpense/>
 
     </Fragment>
   )

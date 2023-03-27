@@ -3,6 +3,7 @@ import { NavLink,Link } from 'react-router-dom';
 import './Header.css';
 import { useDispatch,useSelector } from 'react-redux';
 import { authActions } from '../../Store/auth-slice';
+import { themeActions } from '../../Store/theme-slice';
 // import AuthContext from '../../Store/auth-context';
 // import { useContext } from 'react';
 const Header=()=>{
@@ -14,6 +15,10 @@ const Header=()=>{
    const logoutHandler=()=>{
    dispatch(authActions.logout());
     
+  }
+
+  const changeThemeHandler=()=>{
+     dispatch(themeActions.toggleTheme())
   }
 
   const totalExpenseAmount=expData.reduce((curNumber,item)=>{
@@ -37,9 +42,15 @@ const Header=()=>{
       )}
       {authIsLoggedIn && (
       <Nav >
+      <div className="form-check form-switch my-2">
+       <input className="form-check-input bg-secondary" type="checkbox" role="switch" id="flexSwitchCheckDefault" onClick={changeThemeHandler}/>
+  
+       </div>
           <Nav.Link><NavLink to='/Login' className='loginSignupTitles me-2' onClick={logoutHandler}>Logout</NavLink></Nav.Link>
           <Nav.Link><NavLink to='/ProfileUpdate' className='loginSignupTitles me-2'>Verify Email</NavLink></Nav.Link>
           {totalExpenseAmount>10000 ? <Button style={{backgroundColor:"#7C3E66"}} className='mx-2'>Activate Premium</Button>:""}
+          {/* <Button onClick={changeThemeHandler}>Theme</Button> */}
+         
       </Nav>
       )}
     
