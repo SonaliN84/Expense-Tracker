@@ -1,18 +1,20 @@
 import {Row,Col, Button} from 'react-bootstrap';
 import './ExpenseItem.css';
 import axios from 'axios';
-import { useContext } from 'react';
+// import { useContext } from 'react';
 // import ExpenseContext from '../../../Store/expense-context';
 import { useDispatch } from 'react-redux';
 import { expenseActions } from '../../../Store/expense-slice';
+import { useSelector } from 'react-redux';
 const ExpenseItem=(props)=>{
     // const expCtx=useContext(ExpenseContext)
     const dispatch=useDispatch();
+    const email=useSelector(state=>state.auth.userEmail)
     const deleteExpenseHandler=()=>{
-        axios.delete(`https://expense-tracker-c62f3-default-rtdb.firebaseio.com/expenses/${props.id}.json`)
+        axios.delete(`https://expense-tracker-c62f3-default-rtdb.firebaseio.com/expenses${email}/${props.id}.json`)
         .then(()=>{
             console.log("del")
-            axios.get('https://expense-tracker-c62f3-default-rtdb.firebaseio.com/expenses.json')
+            axios.get(`https://expense-tracker-c62f3-default-rtdb.firebaseio.com/expenses${email}.json`)
             .then((response)=>{
                 console.log(response)
                 console.log(response.data,"get")

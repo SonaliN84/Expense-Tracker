@@ -1,9 +1,10 @@
 import {Form,Button} from 'react-bootstrap';
 import './AuthForm.css';
 import { useRef } from 'react';
+import { useHistory } from 'react-router-dom';
 
 const SignUpForm =()=>{
-
+    const history=useHistory();
     const emailInputRef=useRef();
     const passwordInputRef=useRef();
     const confirmPasswordRef=useRef();
@@ -32,7 +33,8 @@ const SignUpForm =()=>{
             if(response.ok)
             {
                 return response.json().then((res)=>{
-                    console.log("User has been succesfully signed up")
+                    console.log("User has been succesfully signed up");
+                    history.replace('/login')
                 })
                 
             }

@@ -5,7 +5,8 @@ import { NavLink, useHistory } from 'react-router-dom';
 
 import { useDispatch } from 'react-redux';
 import { authActions } from '../../Store/auth-slice';
-
+import { expenseActions } from '../../Store/expense-slice';
+import axios from 'axios';
 const LoginForm=()=>{
     const dispatch=useDispatch();
     const history=useHistory();
@@ -46,11 +47,40 @@ const LoginForm=()=>{
             }
         })
         .then((data)=>{
+          console.log("data login",data)
           console.log("login",data.idToken)
             // authCtx.login(data.idToken);
-            dispatch(authActions.login(data.idToken));
+            const email=data.email;
+            const newEmail=email.replace(/[^a-zA-z0-9 ]/g,'');
+
+            // dispatch(authActions.login(data.idToken));
+
+            dispatch(authActions.login({
+              token:data.idToken,
+              email:newEmail
+            }));
             history.replace('/Users')
             console.log("user has been logged in")
+            axios.get(`https://expense-tracker-c62f3-default-rtdb.firebaseio.com/expenses${newEmail}.json`)
+            .then((response)=>{
+                console.log(response)
+                console.log(response.data)
+                let array=[];
+                Object.keys(response.data).forEach((key)=>{
+                    let obj={
+                        id:key,
+                        amount:response.data[key].amount,
+                        description:response.data[key].description,
+                        category:response.data[key].category
+                    }
+                    array.push(obj)
+                    
+                    
+                    console.log(obj)
+                })
+                // expCtx.setExpenses(array)
+                dispatch(expenseActions.setExpenses(array))
+            })
         })
         .catch((err)=>{
             alert(err.message)

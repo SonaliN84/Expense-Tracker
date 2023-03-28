@@ -4,12 +4,13 @@ import {useState,useContext,useRef} from 'react';
 import { useSelector,useDispatch } from 'react-redux';
 import { expenseActions } from '../../../Store/expense-slice';
 // import ExpenseContext from '../../../Store/expense-context';
-import axios from 'axios'
+import axios from 'axios';
 const ExpenseForm=()=>{
     const dispatch=useDispatch();
     const expIsEdit=useSelector(state=>state.expense.isEdit);
     const expIsForm=useSelector(state=>state.expense.isForm);
     const expEditExpense=useSelector(state=>state.expense.editExpense);
+    const email=useSelector(state=>state.auth.userEmail)
    const inputAmountRef=useRef('')
    const inputDescriptionRef=useRef('')
    const inputCategoryRef=useRef('')
@@ -37,10 +38,10 @@ const ExpenseForm=()=>{
          
         let newExpense=JSON.stringify(expense)
         if(!expIsEdit){
-        axios.post('https://expense-tracker-c62f3-default-rtdb.firebaseio.com/expenses.json',newExpense)
+        axios.post(`https://expense-tracker-c62f3-default-rtdb.firebaseio.com/expenses${email}.json`,newExpense)
         .then((response)=>{
             console.log(response.data)
-            axios.get('https://expense-tracker-c62f3-default-rtdb.firebaseio.com/expenses.json')
+            axios.get(`https://expense-tracker-c62f3-default-rtdb.firebaseio.com/expenses${email}.json`)
             .then((response)=>{
                 console.log(response)
                 console.log(response.data)
@@ -67,7 +68,7 @@ const ExpenseForm=()=>{
     }
     else{
         let id=expEditExpense.id
-        axios.put(`https://expense-tracker-c62f3-default-rtdb.firebaseio.com/expenses/${id}.json`,expense)
+        axios.put(`https://expense-tracker-c62f3-default-rtdb.firebaseio.com/expenses${email}/${id}.json`,expense)
         .then(()=>{
             // expCtx.setIsEdit(false);
              dispatch(expenseActions.setIsEdit(false))
@@ -75,7 +76,7 @@ const ExpenseForm=()=>{
             // expCtx.setEditExpense({})
            dispatch(expenseActions.setIsForm(false))
             // expCtx.setIsForm(false)
-            axios.get('https://expense-tracker-c62f3-default-rtdb.firebaseio.com/expenses.json')
+            axios.get(`https://expense-tracker-c62f3-default-rtdb.firebaseio.com/expenses${email}.json`)
             .then((response)=>{
                 console.log(response)
                 console.log(response.data)

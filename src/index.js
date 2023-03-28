@@ -15,16 +15,16 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
   <React.StrictMode>
-  <ExpenseContextProvider>
+  {/* <ExpenseContextProvider> */}
   {/* <AuthContextProvider> */}
-   <BrowserRouter>
 
+   <BrowserRouter>
    <Provider store={store}>
              <App />
           </Provider>
   </BrowserRouter>
   {/* </AuthContextProvider> */}
-  </ExpenseContextProvider>
+  {/* </ExpenseContextProvider> */}
   </React.StrictMode>
 );
 

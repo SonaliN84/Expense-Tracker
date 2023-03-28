@@ -4,19 +4,21 @@ import './ExpenseData.css';
 import { useSelector } from 'react-redux';
 import ExpenseItem from './ExpenseItem';
 const ExpenseData=()=>{
+  const expData=useSelector(state=>state.expense.expenses)
     // const expCtx=useContext(ExpenseContext);
    const expenseList=useSelector(state=>state.expense.expenses)
+   const totalExpenseAmount=expData.reduce((curNumber,item)=>{
+    return curNumber+Number.parseInt(item.amount);
+ },0)
   return(
     <div className="expense-data">
-    <div className="text-center">
-   
-
-     
-
-      {expenseList.map((item)=>(
+    {expenseList.length===0 && <div className="text-center"><h5>No expenses found!!</h5></div>}
+   {expenseList.length>0 && <div className="text-center">
+       {expenseList.map((item)=>(
         <ExpenseItem amount={item.amount} description={item.description} category={item.category} id={item.id}/>
       ))}
-      </div>
+      <h5>Total Expense Amount=Rs. {totalExpenseAmount}</h5>
+      </div>}
     </div>
    
   )

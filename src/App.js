@@ -23,6 +23,7 @@ const dispatch=useDispatch();
 const authToken=useSelector(state=>state.auth.token)
 const authIsLoggedIn=useSelector(state=>state.auth.isLoggedIn)
 // const expCtx=useContext(ExpenseContext)
+const email=useSelector(state=>state.auth.userEmail)
 useEffect(()=>{
   
   console.log(authIsLoggedIn)
@@ -65,7 +66,7 @@ useEffect(()=>{
    console.log(err)
   })
 
-  axios.get('https://expense-tracker-c62f3-default-rtdb.firebaseio.com/expenses.json')
+  axios.get(`https://expense-tracker-c62f3-default-rtdb.firebaseio.com/expenses${email}.json`)
             .then((response)=>{
                 console.log(response)
                 console.log(response.data)
@@ -83,11 +84,12 @@ useEffect(()=>{
               dispatch(expenseActions.setExpenses(array))
             })
 }
-},[])
- useEffect(() => {
+},[authIsLoggedIn])
+
+useEffect(() => {
    const theme=localStorage.getItem('theme')
-      document.body.className = theme;
-    }, [theme]);
+   document.body.className = theme;
+}, [theme]);
 
 
   return (
