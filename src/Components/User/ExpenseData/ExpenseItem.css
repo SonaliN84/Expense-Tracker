@@ -6,3 +6,9 @@
     color:white;
     background-color:rgb(20, 20, 142) ;
 }
+/* @media screen and (max-width:650px)
+{
+    .expense-row{
+        padding:1px;  
+    }
+} */

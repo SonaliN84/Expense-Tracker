@@ -1,4 +1,4 @@
-import {Switch,Route} from 'react-router-dom';
+import {Switch,Route, Redirect} from 'react-router-dom';
 import './App.css';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
@@ -96,7 +96,12 @@ useEffect(() => {
    <div>
    <RootLayout>
    <Switch>
-    
+   {authIsLoggedIn && <Route path='/' exact>
+       <Redirect to='/Users'/>
+    </Route>}
+    {!authIsLoggedIn && <Route path='/' exact>
+       <Redirect to='/Login'/>
+    </Route>}
     <Route path='/SignUp'>
       <SignUp/>
     </Route>

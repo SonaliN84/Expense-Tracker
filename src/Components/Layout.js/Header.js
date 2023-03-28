@@ -8,7 +8,7 @@ import { expenseActions } from '../../Store/expense-slice';
 // import AuthContext from '../../Store/auth-context';
 import { Provider } from 'react-redux';
 import store from '../../Store/index'
-import { BrowserRouter } from 'react-router-dom';
+
 // import { useContext } from 'react';
 const Header=()=>{
  
@@ -34,9 +34,11 @@ const Header=()=>{
    return(
    
     <Provider store={store}> 
-   <Navbar bg="primary" variant="dark" >
+   <Navbar bg="primary" expand="lg" variant="dark" collapseOnSelect>
    
       <Navbar.Brand href="#home" className='mx-4'>Expense Tracker</Navbar.Brand>
+      <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+      <Navbar.Collapse id="responsive-navbar-nav">
       <Nav className="me-auto">
         {/* <Nav.Link href="#home">Home</Nav.Link>
         <Nav.Link href="#features">About</Nav.Link>
@@ -66,7 +68,7 @@ const Header=()=>{
          
       </Nav>
       )}
-    
+      </Navbar.Collapse>
   </Navbar>
 
    </Provider>
