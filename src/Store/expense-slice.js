@@ -22,6 +22,7 @@ const expenseSlice=createSlice({
         setIsForm(state,action){
             state.isForm=action.payload
         }
+        
 
     }
 })

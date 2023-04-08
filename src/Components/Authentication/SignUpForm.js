@@ -17,7 +17,7 @@ const SignUpForm =()=>{
       const enteredConfirmPassword=confirmPasswordRef.current.value;
       if(enteredPassword===enteredConfirmPassword)
       {
-        let url="https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyChjskkFF5ut3_qondDFsUOAko7B8HCDv0";
+        let url="http://localhost:3000/user/signup";
         fetch(url,{
             method:'POST',
             body:JSON.stringify({
@@ -34,13 +34,16 @@ const SignUpForm =()=>{
             {
                 return response.json().then((res)=>{
                     console.log("User has been succesfully signed up");
+                    console.log(res)
+                    alert(res.message)
                     history.replace('/login')
                 })
                 
             }
             else{
                 return response.json().then((data)=>{
-                let errorMessage='Authentication failed';
+                  console.log(data.err)
+                let errorMessage=data.err;
                 throw new Error(errorMessage)
                 })
             }
