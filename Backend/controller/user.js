@@ -29,3 +29,24 @@ exports.postSignUpUser=async(req,res,next)=>{
     }
 }
 
+exports.postLoginUser=(req,res,next)=>{
+    const email=req.body.email;
+    const password=req.body.password;
+    User.findAll({where:{email:email}})
+    .then(users=>{
+       
+        const user=users[0]
+        
+       if(!user)
+       { 
+       return res.status(404).json({err:"User not found"})
+       }
+
+       if(user.password!==password){
+        return res.status(401).json({err:"Incorrect Password"})
+       }
+
+       res.status(200).json({message:"User Logged in successfully"})
+
+    })
+}

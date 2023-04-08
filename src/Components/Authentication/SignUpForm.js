@@ -2,6 +2,7 @@ import {Form,Button} from 'react-bootstrap';
 import './AuthForm.css';
 import { useRef } from 'react';
 import { useHistory } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 const SignUpForm =()=>{
     const history=useHistory();
@@ -23,7 +24,7 @@ const SignUpForm =()=>{
             body:JSON.stringify({
                 email:enteredEmail,
                 password:enteredPassword,
-                returnSecureToken:true
+                
               }),
               headers:{
                 'Content-Type':'application/json'
@@ -62,7 +63,7 @@ const SignUpForm =()=>{
     <h3 style={{textAlign:"center"}}>Sign Up</h3>
      <Form.Group className="mb-2" controlId="formBasicEmail">
         <Form.Label>Email address</Form.Label>
-        <Form.Control type="email" placeholder="Enter email" required ref={emailInputRef}/>
+        <Form.Control type="email" placeholder="Enter Email" required ref={emailInputRef}/>
     
       </Form.Group>
 
@@ -76,14 +77,13 @@ const SignUpForm =()=>{
         <Form.Control type="password" placeholder="Confirm Password" required ref={confirmPasswordRef}/>
       </Form.Group>
       
-      <Button variant="primary" type="submit" >
-        Submit
+      <Button variant="primary" type="submit" className='my-2' style={{borderRadius:"10px"}}>
+        Sign Up
       </Button>
     
-    
+      <p style={{textAlign:"center"}}>Have an account? <NavLink to='/Login' className="mb-3" style={{textAlign:"center",textDecoration:"none"}}>Login</NavLink></p>
 
-   
-  </Form>
+ </Form>
  );
 }
 export default SignUpForm;

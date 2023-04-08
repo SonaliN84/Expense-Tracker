@@ -21,7 +21,7 @@ const LoginForm=()=>{
       const enteredPassword=passwordInputRef.current.value;
      
       
-        let url='https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyChjskkFF5ut3_qondDFsUOAko7B8HCDv0';
+        let url='http://localhost:3000/user/login';
         fetch(url,{
             method:'POST',
             body:JSON.stringify({
@@ -41,7 +41,7 @@ const LoginForm=()=>{
             }
             else{
                 return response.json().then((data)=>{
-                let errorMessage='Authentication failed';
+                let errorMessage=data.err;
                 throw new Error(errorMessage)
                 })
             }
@@ -95,7 +95,7 @@ const LoginForm=()=>{
     <h3 style={{textAlign:"center"}}>Login</h3>
      <Form.Group className="mb-2" controlId="formBasicEmail">
         <Form.Label>Email address</Form.Label>
-        <Form.Control type="email" placeholder="Enter email" required ref={emailInputRef}/>
+        <Form.Control type="email" placeholder="Enter Email" required ref={emailInputRef}/>
     
       </Form.Group>
 
@@ -103,14 +103,13 @@ const LoginForm=()=>{
         <Form.Label>Password</Form.Label>
         <Form.Control type="password" placeholder="Password" required ref={passwordInputRef}/>
       </Form.Group>
-      <NavLink to='/Forgot_Password' className="mb-3" style={{textAlign:"center",textDecoration:"none"}}>Forgot password</NavLink>
-      <Button variant="primary" type="submit" >
-        Submit
+      
+      <Button variant="primary" type="submit" className='my-3'>
+        Login
       </Button>
+      <NavLink to='/Forgot_Password' className="mb-3" style={{textAlign:"center",textDecoration:"none"}}>Forgot password</NavLink>
     
-    
-
-   
+      <p style={{textAlign:"center"}}>Don't have an account? <NavLink to='/SignUp' className="mb-3" style={{textAlign:"center",textDecoration:"none"}}>Sign Up</NavLink></p>
   </Form> 
   );
 }
