@@ -66,22 +66,12 @@ useEffect(()=>{
    console.log(err)
   })
 
-  axios.get(`https://expense-tracker-c62f3-default-rtdb.firebaseio.com/expenses${email}.json`)
+  axios.get('http://localhost:3000/expense')
             .then((response)=>{
                 console.log(response)
                 console.log(response.data)
-                let array=[];
-                Object.keys(response.data).forEach((key)=>{
-                    let obj={
-                        id:key,
-                        amount:response.data[key].amount,
-                        description:response.data[key].description,
-                        category:response.data[key].category
-                    }
-                    array.push(obj)
-                    console.log(obj)
-                })
-              dispatch(expenseActions.setExpenses(array))
+                
+              dispatch(expenseActions.setExpenses(response.data))
             })
 }
 },[authIsLoggedIn])

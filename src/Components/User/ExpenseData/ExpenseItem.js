@@ -11,29 +11,16 @@ const ExpenseItem=(props)=>{
     const dispatch=useDispatch();
     const email=useSelector(state=>state.auth.userEmail)
     const deleteExpenseHandler=()=>{
-        axios.delete(`https://expense-tracker-c62f3-default-rtdb.firebaseio.com/expenses${email}/${props.id}.json`)
+        axios.delete(`http://localhost:3000/expense/delete-expense/${props.id}`)
         .then(()=>{
             console.log("del")
-            axios.get(`https://expense-tracker-c62f3-default-rtdb.firebaseio.com/expenses${email}.json`)
+            axios.get('http://localhost:3000/expense')
             .then((response)=>{
                 console.log(response)
                 console.log(response.data,"get")
-                let array=[];
-                if(response.data){
-                Object.keys(response.data).forEach((key)=>{
-                    let obj={
-                        id:key,
-                        amount:response.data[key].amount,
-                        description:response.data[key].description,
-                        category:response.data[key].category
-                    }
-                    array.push(obj)
-                    
-                    
-                    console.log(obj)
-                })
-            }
-                dispatch(expenseActions.setExpenses(array))
+               
+                
+                dispatch(expenseActions.setExpenses(response.data))
             })
         })
     }
@@ -50,33 +37,7 @@ const ExpenseItem=(props)=>{
 
 
 
-        // axios.put(`https://expense-tracker-c62f3-default-rtdb.firebaseio.com/expenses/${props.id}.json`,
-        // {
-        //    amount:props.amount,
-        //    description:props.description,
-        //    category:props.category
-        // })
-        // .then(()=>{
-        //     axios.get('https://expense-tracker-c62f3-default-rtdb.firebaseio.com/expenses.json')
-        //     .then((response)=>{
-        //         console.log(response)
-        //         console.log(response.data)
-        //         let array=[];
-        //         Object.keys(response.data).forEach((key)=>{
-        //             let obj={
-        //                 id:key,
-        //                 amount:response.data[key].amount,
-        //                 description:response.data[key].description,
-        //                 category:response.data[key].category
-        //             }
-        //             array.push(obj)
-                    
-                    
-        //             console.log(obj)
-        //         })
-        //         expCtx.setExpenses(array)
-        //     })
-        // }) 
+     
     }
  return(
    

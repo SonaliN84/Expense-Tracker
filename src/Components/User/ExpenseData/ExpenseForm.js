@@ -36,31 +36,31 @@ const ExpenseForm=()=>{
             category:enteredCategory
         }
          
-        let newExpense=JSON.stringify(expense)
+        // let newExpense=JSON.stringify(expense)
         if(!expIsEdit){
-        axios.post(`https://expense-tracker-c62f3-default-rtdb.firebaseio.com/expenses${email}.json`,newExpense)
+        axios.post('http://localhost:3000/expense/add-expense',expense)
         .then((response)=>{
             console.log(response.data)
-            axios.get(`https://expense-tracker-c62f3-default-rtdb.firebaseio.com/expenses${email}.json`)
+            axios.get('http://localhost:3000/expense')
             .then((response)=>{
                 console.log(response)
                 console.log(response.data)
                 dispatch(expenseActions.setIsForm(false))
                 dispatch(expenseActions.setIsForm(false))
-                let array=[];
-                Object.keys(response.data).forEach((key)=>{
-                    let obj={
-                        id:key,
-                        amount:response.data[key].amount,
-                        description:response.data[key].description,
-                        category:response.data[key].category
-                    }
-                    array.push(obj)
+                // let array=[];
+                // Object.keys(response.data).forEach((key)=>{
+                //     let obj={
+                //         id:key,
+                //         amount:response.data[key].amount,
+                //         description:response.data[key].description,
+                //         category:response.data[key].category
+                //     }
+                //     array.push(obj)
                     
                     
-                    console.log(obj)
-                })
-               dispatch(expenseActions.setExpenses(array))
+                //     console.log(obj)
+                // })
+               dispatch(expenseActions.setExpenses(response.data))
                 // expCtx.setExpenses(array)
             })
         })
