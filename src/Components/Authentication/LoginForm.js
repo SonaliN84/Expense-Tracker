@@ -22,33 +22,44 @@ const LoginForm=()=>{
      
       
         let url='http://localhost:3000/user/login';
-        fetch(url,{
-            method:'POST',
-            body:JSON.stringify({
-                email:enteredEmail,
-                password:enteredPassword,
-                returnSecureToken:true
-              }),
-              headers:{
-                'Content-Type':'application/json'
-              }
+        axios.post('http://localhost:3000/user/login',{
+          email:enteredEmail,
+          password:enteredPassword
         })
-        .then((response)=>{
-            if(response.ok)
-            {
-                return response.json()
+        .then(response=>{
+          console.log(response)
+          dispatch(authActions.login({
+              token:response.data.token,
+            }))
+            history.replace('/Users')
+        })
+        // fetch(url,{
+        //     method:'POST',
+        //     body:JSON.stringify({
+        //         email:enteredEmail,
+        //         password:enteredPassword,
+        //         returnSecureToken:true
+        //       }),
+        //       headers:{
+        //         'Content-Type':'application/json'
+        //       }
+        // })
+        // .then((response)=>{
+        //     if(response.ok)
+        //     {
+        //         return response.json()
                 
-            }
-            else{
-                return response.json().then((data)=>{
-                let errorMessage=data.err;
-                throw new Error(errorMessage)
-                })
-            }
-        })
-        .then((data)=>{
-          console.log("data login",data)
-          console.log("login",data.idToken)
+        //     }
+        //     else{
+        //         return response.json().then((data)=>{
+        //         let errorMessage=data.err;
+        //         throw new Error(errorMessage)
+        //         })
+        //     }
+        // })
+        // .then((data)=>{/////////
+          // console.log("data login",data)
+          // console.log("login",data.idToken)
             // // authCtx.login(data.idToken);
             // const email=data.email;
             // const newEmail=email.replace(/[^a-zA-z0-9 ]/g,'');
@@ -59,32 +70,19 @@ const LoginForm=()=>{
             //   token:data.idToken,
             //   email:newEmail
             // }));
-            history.replace('/Users')
+            // history.replace('/Users')/////////
             // console.log("user has been logged in")
-            // axios.get(`https://expense-tracker-c62f3-default-rtdb.firebaseio.com/expenses${newEmail}.json`)
+            // axios.get('http://localhost:3000/expense')
             // .then((response)=>{
             //     console.log(response)
             //     console.log(response.data)
-            //     let array=[];
-            //     Object.keys(response.data).forEach((key)=>{
-            //         let obj={
-            //             id:key,
-            //             amount:response.data[key].amount,
-            //             description:response.data[key].description,
-            //             category:response.data[key].category
-            //         }
-            //         array.push(obj)
-                    
-                    
-            //         console.log(obj)
-            //     })
-            //     // expCtx.setExpenses(array)
-            //     dispatch(expenseActions.setExpenses(array))
+                
+            //   dispatch(expenseActions.setExpenses(response.data))
             // })
-        })
-        .catch((err)=>{
-            alert(err.message)
-        })
+        // })
+        // .catch((err)=>{
+        //     alert(err.message)
+        // })
       }
      
     

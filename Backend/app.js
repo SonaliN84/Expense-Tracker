@@ -11,6 +11,8 @@ const expenseRoutes=require('./routes/expense')
 const app=express();
 
 var cors=require('cors');
+const Expense = require('./models/expense');
+const User=require('./models/user')
 
 app.use(cors());
 
@@ -21,6 +23,9 @@ app.use(userRoutes)
 
 app.use(expenseRoutes)
 
+
+Expense.belongsTo(User);
+User.hasMany(Expense)
 
 
 sequelize.sync()

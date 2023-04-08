@@ -11,6 +11,7 @@ const ExpenseForm=()=>{
     const expIsForm=useSelector(state=>state.expense.isForm);
     const expEditExpense=useSelector(state=>state.expense.editExpense);
     const email=useSelector(state=>state.auth.userEmail)
+    const authToken=useSelector(state=>state.auth.token)
    const inputAmountRef=useRef('')
    const inputDescriptionRef=useRef('')
    const inputCategoryRef=useRef('')
@@ -29,6 +30,14 @@ const ExpenseForm=()=>{
         const enteredDescription=inputDescriptionRef.current.value
         const enteredCategory=inputCategoryRef.current.value
 
+        if(enteredAmount<0 || enteredDescription.trim().length==0){
+           alert("Please enter valid amount")
+           return;
+        }
+        if(enteredDescription.trim().length==0){
+
+        }
+
         let expense={
             
             amount:enteredAmount,
@@ -38,10 +47,10 @@ const ExpenseForm=()=>{
          
         // let newExpense=JSON.stringify(expense)
         if(!expIsEdit){
-        axios.post('http://localhost:3000/expense/add-expense',expense)
+        axios.post('http://localhost:3000/expense/add-expense',expense,{headers:{"Authorization":authToken}})
         .then((response)=>{
             console.log(response.data)
-            axios.get('http://localhost:3000/expense')
+            axios.get('http://localhost:3000/expense',{headers:{"Authorization":authToken}})
             .then((response)=>{
                 console.log(response)
                 console.log(response.data)
@@ -63,6 +72,9 @@ const ExpenseForm=()=>{
                dispatch(expenseActions.setExpenses(response.data))
                 // expCtx.setExpenses(array)
             })
+        })
+        .catch(err=>{
+            console.log(err)
         })
 
     }
@@ -122,7 +134,7 @@ const ExpenseForm=()=>{
         <Form.Control placeholder="Description" className='mx-2 my-4' ref={inputDescriptionRef} required defaultValue={expEditExpense.description}/>
       </Col>
       <Col>
-        <Form.Control placeholder="Amount" className='my-4' ref={inputAmountRef} required defaultValue={expEditExpense.amount}/>
+        <Form.Control placeholder="Amount" className='my-4' ref={inputAmountRef} required defaultValue={expEditExpense.amount} type="number" step="0.01"/>
       </Col>
     </Row>
     <Row >

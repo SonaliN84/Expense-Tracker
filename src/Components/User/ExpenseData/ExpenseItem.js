@@ -1,20 +1,21 @@
 import {Row,Col, Button} from 'react-bootstrap';
 import './ExpenseItem.css';
 import axios from 'axios';
-// import { useContext } from 'react';
-// import ExpenseContext from '../../../Store/expense-context';
+
 import { useDispatch } from 'react-redux';
 import { expenseActions } from '../../../Store/expense-slice';
 import { useSelector } from 'react-redux';
 const ExpenseItem=(props)=>{
-    // const expCtx=useContext(ExpenseContext)
+    
     const dispatch=useDispatch();
-    const email=useSelector(state=>state.auth.userEmail)
+    
+    const authToken=useSelector(state=>state.auth.token)
+
     const deleteExpenseHandler=()=>{
-        axios.delete(`http://localhost:3000/expense/delete-expense/${props.id}`)
+        axios.delete(`http://localhost:3000/expense/delete-expense/${props.id}`,{headers:{"Authorization":authToken}})
         .then(()=>{
-            console.log("del")
-            axios.get('http://localhost:3000/expense')
+            
+            axios.get('http://localhost:3000/expense',{headers:{"Authorization":authToken}})
             .then((response)=>{
                 console.log(response)
                 console.log(response.data,"get")
@@ -22,6 +23,9 @@ const ExpenseItem=(props)=>{
                 
                 dispatch(expenseActions.setExpenses(response.data))
             })
+        })
+        .catch(err=>{
+            console.log(err)
         })
     }
 
@@ -35,10 +39,7 @@ const ExpenseItem=(props)=>{
         category:props.category
      }))
 
-
-
-     
-    }
+}
  return(
    
     <Row className='expense-row'>
@@ -48,7 +49,7 @@ const ExpenseItem=(props)=>{
         <Col>
             <Button onClick={editExpenseHandler} size="sm" >Edit</Button>   
          <Button onClick={deleteExpenseHandler} size="sm" className='mx-2'>x</Button>
-                 </Col>
+        </Col>
         
         
       </Row>

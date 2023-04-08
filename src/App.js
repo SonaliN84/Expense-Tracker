@@ -23,11 +23,12 @@ const dispatch=useDispatch();
 const authToken=useSelector(state=>state.auth.token)
 const authIsLoggedIn=useSelector(state=>state.auth.isLoggedIn)
 // const expCtx=useContext(ExpenseContext)
-const email=useSelector(state=>state.auth.userEmail)
+
 useEffect(()=>{
   
   console.log(authIsLoggedIn)
   if(authIsLoggedIn){
+
   let url='https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyChjskkFF5ut3_qondDFsUOAko7B8HCDv0';
   fetch(url,{
       method:'POST',
@@ -66,7 +67,7 @@ useEffect(()=>{
    console.log(err)
   })
 
-  axios.get('http://localhost:3000/expense')
+  axios.get('http://localhost:3000/expense',{headers:{"Authorization":authToken}})
             .then((response)=>{
                 console.log(response)
                 console.log(response.data)
