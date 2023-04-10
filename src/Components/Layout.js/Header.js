@@ -5,21 +5,27 @@ import { useDispatch,useSelector } from 'react-redux';
 import { authActions } from '../../Store/auth-slice';
 import { themeActions } from '../../Store/theme-slice';
 import { expenseActions } from '../../Store/expense-slice';
-// import AuthContext from '../../Store/auth-context';
+import useRazorpay from "react-razorpay";
+import axios from 'axios';
+
 import { Provider } from 'react-redux';
 import store from '../../Store/index'
 
-// import { useContext } from 'react';
+
 const Header=()=>{
  
-        
+  
+   const Razorpay = useRazorpay();     
   const dispatch=useDispatch();
   const authIsLoggedIn =useSelector(state=>state.auth.isLoggedIn)
+  const authToken=useSelector(state=>state.auth.token)
   const expData=useSelector(state=>state.expense.expenses)
- 
-  //  const authCtx=useContext(AuthContext)
-   const logoutHandler=()=>{
+   const authIsPremium=useSelector(state=>state.auth.isPremium)
    
+
+ 
+   const logoutHandler=()=>{
+
    dispatch(authActions.logout());
     dispatch(expenseActions.setExpenses([]))
   }
@@ -31,6 +37,42 @@ const Header=()=>{
   const totalExpenseAmount=expData.reduce((curNumber,item)=>{
     return curNumber+Number.parseInt(item.amount);
  },0)
+
+ const activatePremiumHandler=()=>{
+   
+   axios.get('http://localhost:3000/purchase/premiummembership',{headers:{"Authorization":authToken}})
+   .then((response)=>{
+   
+  
+
+   const options={
+      "key":response.data.key_id,
+      "order_id":response.data.order.id,
+      "handler":async function (response){
+         await axios.post('http://localhost:3000/purchase/updatetransactionstatus',{
+            order_id:options.order_id,
+            payment_id:response.razorpay_payment_id
+         },{headers:{"Authorization":authToken}})
+         alert('You are a Premium User now')
+         dispatch(authActions.setIsPremium())
+      }
+   }
+   const rzpl=new Razorpay(options);
+   rzpl.open();
+
+   rzpl.on('payment.failed',async function(response){
+     await axios.post('http://localhost:3000/purchase/failedtransaction',{
+         order_id:options.order_id
+      },{headers:{"Authorization":authToken}})
+      alert("Something went wrong")
+   })
+})
+.catch(err=>{
+   console.log(err)
+})
+ 
+ }
+
    return(
    
     <Provider store={store}> 
@@ -63,11 +105,14 @@ const Header=()=>{
        </div>
           <Nav.Link><NavLink to='/Login' className='loginSignupTitles me-2' onClick={logoutHandler}>Logout</NavLink></Nav.Link>
           <Nav.Link><NavLink to='/ProfileUpdate' className='loginSignupTitles'>Verify Email</NavLink></Nav.Link>
-          {totalExpenseAmount>10000 ? <Button style={{backgroundColor:"#7C3E66"}} className='mx-2'>Activate Premium</Button>:""}
-          {/* <Button onClick={changeThemeHandler}>Theme</Button> */}
+          
+          {!authIsPremium && (<Button style={{backgroundColor:"#7C3E66"}} className='mx-2' onClick={activatePremiumHandler}>Activate Premium</Button>)}
          
-      </Nav>
+       </Nav>
       )}
+     
+      
+      
       </Navbar.Collapse>
   </Navbar>
 

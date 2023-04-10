@@ -1,6 +1,9 @@
 import {createSlice} from "@reduxjs/toolkit";
 
 const initialToken=localStorage.getItem('token')
+const initialIsPremium=localStorage.getItem('isPremium')
+console.log("initial ",typeof initialIsPremium)
+const convertToBooleanIsPremium=(initialIsPremium=="true")
 
 
 const userIsLoggedIn=!!initialToken;
@@ -9,7 +12,7 @@ const initialAuthState={
   isLoggedIn:userIsLoggedIn,
   ProfileName:'',
   profilePhotoUrl:'',
-
+  isPremium:convertToBooleanIsPremium
 }
 const authSlice=createSlice({
     name:'auth',
@@ -17,14 +20,18 @@ const authSlice=createSlice({
     reducers:{
       login(state,action){
         state.token=action.payload.token;
+        state.isPremium=action.payload.isPremium;
         state.isLoggedIn=true;
         localStorage.setItem('token',action.payload.token)
+        localStorage.setItem('isPremium',action.payload.isPremium)
         
       }, 
       logout(state){
        state.token=null;
        state.isLoggedIn=false;
        localStorage.removeItem('token')
+       localStorage.removeItem('isPremium')
+
       
       },
       setProfileName(state,action){
@@ -32,8 +39,12 @@ const authSlice=createSlice({
       },
       setprofilePhotoUrl(state,action){
         state.profilePhotoUrl=action.payload;
+      },
+      setIsPremium(state){
+        state.isPremium=true;
+        localStorage.setItem('isPremium',true)
       }
-
+      
     }
 })
 export const authActions=authSlice.actions;
