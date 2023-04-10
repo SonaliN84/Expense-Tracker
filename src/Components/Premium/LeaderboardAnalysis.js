@@ -23,7 +23,7 @@ console.log("<<>><>",expenseLeaderboardData)
        
        {expenseLeaderboardData.map((data,index)=>(
 
-      <ShowLeaderboardData name={data.user.name} totalexpense={data.expenseSum} index={index}/>
+      <ShowLeaderboardData name={data.name} totalexpense={data.totalexpense} index={index}/>
        ))}
        
       </tbody>

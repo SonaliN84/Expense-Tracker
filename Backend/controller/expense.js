@@ -26,7 +26,9 @@ exports.postAddExpense=async(req,res,next)=>{
        description:description,
        category:category
     })
-   
+    req.user.update({
+        totalexpense:req.user.totalexpense+Number.parseInt(amount)
+    })
     return res.status(201).json(expense)
   }
   catch(err){

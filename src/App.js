@@ -81,8 +81,8 @@ useEffect(()=>{
            axios.get('http://localhost:3000/premium/showleaderboard',{headers:{"Authorization":authToken}})
             .then((response)=>{
              console.log(response.data)
-             const data=response.data.sort((a,b)=>b.expenseSum-a.expenseSum);
-             dispatch(expenseActions.setLeaderBoardData(data))
+             
+             dispatch(expenseActions.setLeaderBoardData(response.data))
              
             })
           }
