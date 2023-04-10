@@ -4,7 +4,8 @@ const initialExpenseState={
     expenses:[],
    editExpense:{},
    isEdit:false,
-   isForm:false
+   isForm:false,
+   leaderboardData:[]
 }
 const expenseSlice=createSlice({
     name:'expense',
@@ -21,8 +22,11 @@ const expenseSlice=createSlice({
         },
         setIsForm(state,action){
             state.isForm=action.payload
+        },
+        setLeaderBoardData(state,action)
+        {
+            state.leaderboardData=action.payload
         }
-        
 
     }
 })

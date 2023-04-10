@@ -13,18 +13,21 @@ const LoginForm=()=>{
     const emailInputRef=useRef();
     const passwordInputRef=useRef();
     
+    
 
     const submitHandler=(event)=>{
       event.preventDefault();
 
       const enteredEmail=emailInputRef.current.value;
       const enteredPassword=passwordInputRef.current.value;
-     
+       
       
        
         axios.post('http://localhost:3000/user/login',{
+          
           email:enteredEmail,
-          password:enteredPassword
+          password:enteredPassword,
+          
         })
         .then(response=>{
           
@@ -48,6 +51,7 @@ const LoginForm=()=>{
   return(
     <Form className='Auth-form border d-grid' onSubmit={submitHandler}>
     <h3 style={{textAlign:"center"}}>Login</h3>
+    
      <Form.Group className="mb-2" controlId="formBasicEmail">
         <Form.Label>Email address</Form.Label>
         <Form.Control type="email" placeholder="Enter Email" required ref={emailInputRef}/>

@@ -14,6 +14,8 @@ const expenseRoutes=require('./routes/expense')
 
 const purchaseRoutes=require('./routes/purchase')
 
+const premiumRoutes=require('./routes/premium')
+
 
 const app=express();
 
@@ -32,6 +34,8 @@ app.use(userRoutes)
 app.use(expenseRoutes)
 
 app.use(purchaseRoutes)
+
+app.use(premiumRoutes)
 
 Expense.belongsTo(User);
 User.hasMany(Expense)

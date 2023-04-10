@@ -9,6 +9,7 @@ const SignUpForm =()=>{
     const emailInputRef=useRef();
     const passwordInputRef=useRef();
     const confirmPasswordRef=useRef();
+    const nameInputRef=useRef();
 
     const submitHandler=(event)=>{
       event.preventDefault();
@@ -16,12 +17,14 @@ const SignUpForm =()=>{
       const enteredEmail=emailInputRef.current.value;
       const enteredPassword=passwordInputRef.current.value;
       const enteredConfirmPassword=confirmPasswordRef.current.value;
+      const enteredName=nameInputRef.current.value;
       if(enteredPassword===enteredConfirmPassword)
       {
         let url="http://localhost:3000/user/signup";
         fetch(url,{
             method:'POST',
             body:JSON.stringify({
+               name:enteredName,
                 email:enteredEmail,
                 password:enteredPassword,
                 
@@ -61,6 +64,11 @@ const SignUpForm =()=>{
  return (
     <Form className='Auth-form border d-grid' onSubmit={submitHandler}>
     <h3 style={{textAlign:"center"}}>Sign Up</h3>
+    <Form.Group className="mb-2" controlId="formBasicName">
+        <Form.Label>Name</Form.Label>
+        <Form.Control type="text" placeholder="Enter Name" required ref={nameInputRef}/>
+    
+      </Form.Group>
      <Form.Group className="mb-2" controlId="formBasicEmail">
         <Form.Label>Email address</Form.Label>
         <Form.Control type="email" placeholder="Enter Email" required ref={emailInputRef}/>

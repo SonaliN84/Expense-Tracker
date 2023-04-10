@@ -7,14 +7,14 @@ import { themeActions } from '../../Store/theme-slice';
 import { expenseActions } from '../../Store/expense-slice';
 import useRazorpay from "react-razorpay";
 import axios from 'axios';
-
+import { useHistory } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from '../../Store/index'
 
 
 const Header=()=>{
  
-  
+  const history=useHistory();
    const Razorpay = useRazorpay();     
   const dispatch=useDispatch();
   const authIsLoggedIn =useSelector(state=>state.auth.isLoggedIn)
@@ -73,11 +73,21 @@ const Header=()=>{
  
  }
 
+ const showLeaderboardHandler=()=>{
+   axios.get('http://localhost:3000/premium/showleaderboard',{headers:{"Authorization":authToken}})
+   .then((response)=>{
+    console.log(response.data)
+    const data=response.data.sort((a,b)=>b.expenseSum-a.expenseSum);
+    dispatch(expenseActions.setLeaderBoardData(data))
+    history.push('/Leaderboard')
+   })
+ }
+
    return(
    
     <Provider store={store}> 
    <Navbar bg="primary" expand="lg" variant="dark" collapseOnSelect>
-   
+   {authIsLoggedIn && authIsPremium && (<img src='https://cdn-icons-png.flaticon.com/512/9908/9908162.png' style={{width:"50px",height:"50px"}} className='mx-2'/>)}
       <Navbar.Brand href="#home" className='mx-4'>Expense Tracker</Navbar.Brand>
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">
@@ -107,7 +117,9 @@ const Header=()=>{
           <Nav.Link><NavLink to='/ProfileUpdate' className='loginSignupTitles'>Verify Email</NavLink></Nav.Link>
           
           {!authIsPremium && (<Button style={{backgroundColor:"#7C3E66"}} className='mx-2' onClick={activatePremiumHandler}>Activate Premium</Button>)}
-         
+          {authIsPremium && (<Button style={{backgroundColor:"#7C3E66"}} className='mx-2'onClick={showLeaderboardHandler}>Show Leaderboard</Button>)}
+          
+          
        </Nav>
       )}
      

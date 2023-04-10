@@ -20,7 +20,8 @@ exports.postSignUpUser=async(req,res,next)=>{
     try{
     const email=req.body.email;
     const password=req.body.password;
-    if(isStringInValid(email) || isStringInValid(password)){
+    const name=req.body.name;
+    if(isStringInValid(email) || isStringInValid(password) || isStringInValid(name)){
         return res.status(400).json({err:"Bad parameters..Something is missing"})
     }
     
@@ -28,6 +29,7 @@ exports.postSignUpUser=async(req,res,next)=>{
     bcrypt.hash(password,saltrounds,async(err,hash)=>{
         console.log(err)
         await User.create({
+            name:name,
             email:email,
             password:hash
         })

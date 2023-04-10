@@ -14,6 +14,7 @@ import axios from 'axios';
 
 import { useSelector,useDispatch } from 'react-redux';
 import { authActions } from './Store/auth-slice';
+import Leaderboard from './pages/Leaderboard';
 
 function App() {
   
@@ -22,6 +23,7 @@ const theme=useSelector(state=>state.theme.theme)
 const dispatch=useDispatch();
 const authToken=useSelector(state=>state.auth.token)
 const authIsLoggedIn=useSelector(state=>state.auth.isLoggedIn)
+const authIsPremium=useSelector(state=>state.auth.isPremium)
 
 
 useEffect(()=>{
@@ -68,13 +70,22 @@ useEffect(()=>{
   //  console.log(err)
   // })
 
-  axios.get('http://localhost:3000/expense',{headers:{"Authorization":authToken}})
-            .then((response)=>{
-                console.log(response)
-                console.log(response.data)
+   axios.get('http://localhost:3000/expense',{headers:{"Authorization":authToken}})
+   .then((response)=>{
+      console.log(response)
+      console.log(response.data)
                 
-              dispatch(expenseActions.setExpenses(response.data))
+      dispatch(expenseActions.setExpenses(response.data))
+      })
+      if(authIsPremium){
+           axios.get('http://localhost:3000/premium/showleaderboard',{headers:{"Authorization":authToken}})
+            .then((response)=>{
+             console.log(response.data)
+             const data=response.data.sort((a,b)=>b.expenseSum-a.expenseSum);
+             dispatch(expenseActions.setLeaderBoardData(data))
+             
             })
+          }
 }
 },[authIsLoggedIn])
 
@@ -113,6 +124,16 @@ useEffect(() => {
     <Route path='/Forgot_Password'>
       <Forgot_Password/>
     </Route>
+    {authIsLoggedIn && authIsPremium && <Route path='/Leaderboard'>
+      <Leaderboard/>
+    </Route>}
+    {!authIsLoggedIn && <Route path='/Leaderboard'>
+    <Redirect to='/Login'/>
+    </Route>}
+    {authIsLoggedIn && !authIsPremium && <Route path='/Leaderboard'>
+    <Redirect to='/Users'/>
+    </Route>}
+
    </Switch>
    </RootLayout>
    </div>
