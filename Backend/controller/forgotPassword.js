@@ -43,7 +43,7 @@ exports.postForgotPassword=async(req,res,next)=>{
            return res.status(200).json({message:"Reset Password link has been sent to your email"})
         })
         .catch(err=>{
-            throw new Error(err)
+            // throw new Error(err)
             console.log(err)
         })
     })
@@ -113,13 +113,13 @@ exports.getUpdatepassword = (req, res) => {
                     bcrypt.genSalt(saltRounds, function(err, salt) {
                         if(err){
                             console.log(err);
-                            throw new Error(err);
+                            // throw new Error(err);
                         }
                         bcrypt.hash(newpassword, salt, function(err, hash) {
                             // Store hash in your password DB.
                             if(err){
                                 console.log(err);
-                                throw new Error(err);
+                                // throw new Error(err);
                             }
                             user.update({ password: hash }).then(() => {
                                 res.status(201).json({message: 'Successfuly update the new password'})

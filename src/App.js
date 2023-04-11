@@ -15,6 +15,7 @@ import axios from 'axios';
 import { useSelector,useDispatch } from 'react-redux';
 import { authActions } from './Store/auth-slice';
 import Leaderboard from './pages/Leaderboard';
+import DownloadHistory from './pages/DownloadHistory';
 
 function App() {
   
@@ -69,11 +70,21 @@ useEffect(()=>{
   // .catch((err)=>{
   //  console.log(err)
   // })
+  axios.get('http://localhost:3000/expense/downloadHistory',{headers:{"Authorization":authToken}})
+  .then((response)=>{
+    const array=[];
+    for(let i=response.data.length-1;i>=0;i--)
+    {
+      array.push(response.data[i])
+    }
+    dispatch(expenseActions.setDownloadHistory(array))
+   console.log(array)
+  })
 
    axios.get('http://localhost:3000/expense',{headers:{"Authorization":authToken}})
    .then((response)=>{
       console.log(response)
-      console.log(response.data)
+      console.log(response.data[0].createdAt.split('T')[0])
                 
       dispatch(expenseActions.setExpenses(response.data))
       })
@@ -133,6 +144,9 @@ useEffect(() => {
     {authIsLoggedIn && !authIsPremium && <Route path='/Leaderboard'>
     <Redirect to='/Users'/>
     </Route>}
+    <Route path='/DownloadHistory'>
+      <DownloadHistory/>
+    </Route>
 
    </Switch>
    </RootLayout>

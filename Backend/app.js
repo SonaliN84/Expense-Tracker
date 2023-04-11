@@ -29,6 +29,7 @@ const Expense = require('./models/expense');
 const User=require('./models/user')
 const Order=require('./models/order')
 const Forgotpassword=require('./models/forgotPassword')
+const DownloadFile=require('./models/downloadfile')
 
 app.use(cors());
 
@@ -55,12 +56,15 @@ User.hasMany(Order)
 Forgotpassword.belongsTo(User);
 User.hasMany(Forgotpassword)
 
+DownloadFile.belongsTo(User);
+User.hasMany(DownloadFile)
+
 
 sequelize.sync()
 .then((result)=>{
     app.listen(3000);
 })
 .catch(err=>{
-    console.log(err)
+    console.log(">>>>>>",err)
 })
 

@@ -1,18 +1,42 @@
 import { Button } from "react-bootstrap";
 import { useSelector } from "react-redux";
-
+import axios from "axios";
+import { NavLink } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { expenseActions } from "../../../Store/expense-slice";
 
 const DownloadExpense = () => {
-  const expenseData = useSelector((state) => state.expense.expenses);
-  const data = expenseData.map((exp) => {
-    return [exp.description, exp.amount, exp.category];
-  });
-  // console.log("array",data)
-  function makeCSV(rows) {
-    return rows.map((r) => r.join(",")).join("\n");
+  const authToken=useSelector(state=>state.auth.token)
+  const dispatch=useDispatch();
+
+  const downloadExpenseHandler=()=>{
+    axios.get('http://localhost:3000/expense/download',{headers:{"Authorization":authToken}})
+    .then((res)=>{
+   
+      var a = document.createElement("a");
+            a.href = res.data.file;
+            
+            a.click();
+    
+    })
+    .catch(err=>{
+      alert("Something went wrong")
+      console.log(err)
+    })
   }
-  const blob = new Blob([makeCSV(data)]);
-  const h = URL.createObjectURL(blob);
+
+  const downloadHistoryHandler=()=>{
+    axios.get('http://localhost:3000/expense/downloadHistory',{headers:{"Authorization":authToken}})
+    .then((response)=>{
+      const array=[];
+      for(let i=response.data.length-1;i>=0;i--)
+      {
+        array.push(response.data[i])
+      }
+      dispatch(expenseActions.setDownloadHistory(array))
+     console.log(array)
+    })
+  }
 
   return (
   
@@ -26,11 +50,12 @@ const DownloadExpense = () => {
             maxWidth: "90%",
           }}
         >
-          <Button>
-            <a href={h} download="file.csv" style={{ color: "white" }}>
+          <Button onClick={downloadExpenseHandler}>
+           
               Download Expenses
-            </a>
+            
           </Button>
+          <Button className="mx-4" onClick={downloadHistoryHandler}><NavLink to='/DownloadHistory' style={{textDecoration:"none",color:"white"}}>Download's History</NavLink></Button>
         </div>
      
   );
