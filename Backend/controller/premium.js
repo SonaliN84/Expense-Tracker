@@ -30,13 +30,16 @@ exports.getLeaderboard=async(req,res,next)=>{
         
     //     console.log(err)
     // }
-   
+   try{
     const  leaderboardofusers=await User.findAll({
         attributes:['name','totalexpense'],
         order:[['totalexpense','DESC']]
     })
     res.status(200).json(leaderboardofusers)
-
+   }
+   catch(err){
+    res.status(500).json(err)
+   }
     
 
 }
