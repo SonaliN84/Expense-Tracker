@@ -5,6 +5,7 @@ import { useSelector,useDispatch } from 'react-redux';
 import { expenseActions } from '../../../Store/expense-slice';
 // import ExpenseContext from '../../../Store/expense-context';
 import axios from 'axios';
+import { authActions } from '../../../Store/auth-slice';
 const ExpenseForm=()=>{
     const dispatch=useDispatch();
     const expIsEdit=useSelector(state=>state.expense.isEdit);
@@ -15,6 +16,9 @@ const ExpenseForm=()=>{
    const inputAmountRef=useRef('')
    const inputDescriptionRef=useRef('')
    const inputCategoryRef=useRef('')
+   const LIMIT=useSelector(state=>state.auth.limit)
+   const expData=useSelector(state=>state.expense.expenses)
+   const total=useSelector(state=>state.auth.total)
 //    const expCtx=useContext(ExpenseContext)
 
     
@@ -49,29 +53,35 @@ const ExpenseForm=()=>{
         if(!expIsEdit){
         axios.post('http://localhost:3000/expense/add-expense',expense,{headers:{"Authorization":authToken}})
         .then((response)=>{
-            console.log(response.data)
-            axios.get('http://localhost:3000/expense',{headers:{"Authorization":authToken}})
-            .then((response)=>{
-                console.log(response)
-                console.log(response.data)
-                dispatch(expenseActions.setIsForm(false))
-                dispatch(expenseActions.setIsForm(false))
-                // let array=[];
-                // Object.keys(response.data).forEach((key)=>{
-                //     let obj={
-                //         id:key,
-                //         amount:response.data[key].amount,
-                //         description:response.data[key].description,
-                //         category:response.data[key].category
-                //     }
-                //     array.push(obj)
-                    
-                    
-                //     console.log(obj)
-                // })
-               dispatch(expenseActions.setExpenses(response.data))
-                // expCtx.setExpenses(array)
-            })
+          
+          dispatch(authActions.setActivePage(1))
+          // dispatch(expenseActions.setExpenses([response.data]))
+          let array=[];
+          array.push(response.data)
+          console.log("expdata",expData)
+          if(expData.length==LIMIT){
+            for(let i=0;i<expData.length-1;i++)
+          {   
+           
+            array.push(expData[i])
+          }
+          }
+          else{
+            for(let i=0;i<expData.length;i++)
+            {   
+             
+              array.push(expData[i])
+            }
+          }
+          
+          dispatch(authActions.setTotal(total+1)) 
+          dispatch(expenseActions.setExpenses(array))
+        
+          console.log("expdata",expData)
+          console.log(response.data)
+          dispatch(expenseActions.setIsForm(false))
+          dispatch(expenseActions.setIsForm(false))
+        
         })
         .catch(err=>{
             console.log(err)

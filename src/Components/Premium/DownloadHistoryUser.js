@@ -11,8 +11,8 @@ return (
   
     {downloadHistory.map((data,index)=>(
 
-<ShowDownloadHistory file={data.fileURL} date={data.createdAt} />
- ))}
+    <ShowDownloadHistory file={data.fileURL} date={data.createdAt} />
+    ))}
     </div>
 )
 

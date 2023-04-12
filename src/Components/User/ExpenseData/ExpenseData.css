@@ -8,3 +8,7 @@
     background-image: url('https://img.freepik.com/free-vector/soft-blue-watercolor-texture-design-background_1055-15955.jpg');
     background-size: 100% 100%;
 }
+.paginationdiv{
+    width:600px;
+    margin:40px auto;
+}

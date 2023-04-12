@@ -47,8 +47,23 @@ exports.postAddExpense=async(req,res,next)=>{
 
 exports.getExpenses=async(req,res,next)=>{
     try{
-    const expenses=await req.user.getExpenses()
-     return res.status(200).json(expenses)
+   const page=parseInt(req.query.page);
+   console.log(">>>>>",page)
+   let size=parseInt(req.query.size)
+   console.log(">>>>>",size)
+//    const total=await req.user.countExpenses();
+   const total=await Expense.count({where:{userId:req.user.id}})
+//    const offset=Math.max(total-page*size,0);
+    let offset=(total-page*size);
+   console.log("offset",offset)
+   let limit=size;
+   if(offset<0){
+    offset=0;
+    limit=total-(page-1)*size;
+   }
+   console.log("new offset",offset)
+    const expenses=await req.user.getExpenses({offset,limit})
+     return res.status(200).json({expenses,total,page,size})
     }
     catch(err){
     return res.status(500).json({error:err,success:false}) 
@@ -142,10 +157,6 @@ exports.getDownloadExpense=async(req,res,next)=>{
         console.log(err)
         res.status(500).json({file:"",success:false,error:err})
     }
-
-
-
-
 
 }
 

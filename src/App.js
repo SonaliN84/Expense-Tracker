@@ -25,6 +25,10 @@ const dispatch=useDispatch();
 const authToken=useSelector(state=>state.auth.token)
 const authIsLoggedIn=useSelector(state=>state.auth.isLoggedIn)
 const authIsPremium=useSelector(state=>state.auth.isPremium)
+const activePage=useSelector(state=>state.auth.activePage)
+
+  const LIMIT=useSelector(state=>state.auth.limit)
+  console.log("activrepage",activePage)
 
 
 useEffect(()=>{
@@ -81,13 +85,7 @@ useEffect(()=>{
    console.log(array)
   })
 
-   axios.get('http://localhost:3000/expense',{headers:{"Authorization":authToken}})
-   .then((response)=>{
-      console.log(response)
-      console.log(response.data[0].createdAt.split('T')[0])
-                
-      dispatch(expenseActions.setExpenses(response.data))
-      })
+ 
       if(authIsPremium){
            axios.get('http://localhost:3000/premium/showleaderboard',{headers:{"Authorization":authToken}})
             .then((response)=>{

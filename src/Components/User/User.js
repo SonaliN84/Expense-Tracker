@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import './User.css';
+
 import {Link} from 'react-router-dom'
 import ExpenseForm from "./ExpenseData/ExpenseForm";
 import ExpenseData from "./ExpenseData/ExpenseData";
@@ -7,11 +8,9 @@ import DownloadExpense from "./ExpenseData/DownloadExpense";
 
 
 const User=()=>{
-  return (
+return (
     <Fragment>
       
-              
-   
     <div className="profile">
     Your profile is incomplete.
     <Link to='/ProfileUpdate' style={{color:"white",marginLeft:"8px"}}>Complete now</Link>
@@ -23,8 +22,8 @@ const User=()=>{
     <ExpenseForm/>
     <ExpenseData/>
     <DownloadExpense/>
-
-    </Fragment>
-  )
+   
+ </Fragment>
+  );
 }
 export default User;
