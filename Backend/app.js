@@ -1,70 +1,62 @@
-
-const dotenv=require('dotenv');
-
+const dotenv = require("dotenv");
 
 dotenv.config();
-const express=require('express');
+const express = require("express");
 
+const bodyParser = require("body-parser");
 
+const sequelize = require("./util/database");
 
-const bodyParser=require('body-parser');
+const userRoutes = require("./routes/user");
 
-const sequelize=require('./util/database')
+const expenseRoutes = require("./routes/expense");
 
-const userRoutes=require('./routes/user')
+const purchaseRoutes = require("./routes/purchase");
 
-const expenseRoutes=require('./routes/expense')
+const premiumRoutes = require("./routes/premium");
 
-const purchaseRoutes=require('./routes/purchase')
+const forgotPasswordRoutes = require("./routes/forgotPassword");
 
-const premiumRoutes=require('./routes/premium')
+const app = express();
 
-const forgotPasswordRoutes=require('./routes/forgotPassword')
-
-
-const app=express();
-
-var cors=require('cors');
-const Expense = require('./models/expense');
-const User=require('./models/user')
-const Order=require('./models/order')
-const Forgotpassword=require('./models/forgotPassword')
-const DownloadFile=require('./models/downloadfile')
+var cors = require("cors");
+const Expense = require("./models/expense");
+const User = require("./models/user");
+const Order = require("./models/order");
+const Forgotpassword = require("./models/forgotPassword");
+const DownloadFile = require("./models/downloadfile");
 
 app.use(cors());
 
-app.use(bodyParser.json({extended:false}));
+app.use(bodyParser.json({ extended: false }));
 
+app.use(userRoutes);
 
-app.use(userRoutes)
+app.use(expenseRoutes);
 
-app.use(expenseRoutes)
+app.use(purchaseRoutes);
 
-app.use(purchaseRoutes)
+app.use(premiumRoutes);
 
-app.use(premiumRoutes)
-
-app.use(forgotPasswordRoutes)
+app.use(forgotPasswordRoutes);
 
 Expense.belongsTo(User);
-User.hasMany(Expense)
-
+User.hasMany(Expense);
 
 Order.belongsTo(User);
-User.hasMany(Order)
+User.hasMany(Order);
 
 Forgotpassword.belongsTo(User);
-User.hasMany(Forgotpassword)
+User.hasMany(Forgotpassword);
 
 DownloadFile.belongsTo(User);
-User.hasMany(DownloadFile)
+User.hasMany(DownloadFile);
 
-
-sequelize.sync()
-.then((result)=>{
+sequelize
+  .sync()
+  .then((result) => {
     app.listen(3000);
-})
-.catch(err=>{
-    console.log(">>>>>>",err)
-})
-
+  })
+  .catch((err) => {
+    console.log(">>>>>>", err);
+  });

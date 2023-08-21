@@ -12,9 +12,4 @@ router.post('/purchase/updatetransactionstatus',authMiddleware.authenticate,purc
 
 router.post('/purchase/failedtransaction',authMiddleware.authenticate,purchaseController.postFailedTransaction)
 
-
-
-
-
-
 module.exports=router;
