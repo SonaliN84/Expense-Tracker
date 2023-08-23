@@ -32,6 +32,9 @@ const LoginForm = () => {
             isPremium: response.data.isPremium,
           })
         );
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("isPremium", response.data.isPremium);
+        localStorage.setItem("limit", 5);
       })
       .catch((error) => {
         alert(error.response.data.err);

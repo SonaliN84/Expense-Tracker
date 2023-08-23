@@ -26,20 +26,13 @@ const authSlice = createSlice({
       state.token = action.payload.token;
       state.isPremium = action.payload.isPremium;
       state.isLoggedIn = true;
-      localStorage.setItem("token", action.payload.token);
-      localStorage.setItem("isPremium", action.payload.isPremium);
       state.activePage = 1;
       localStorage.setItem("activePage", state.activePage);
-      localStorage.setItem("limit", 5);
       state.limit = 5;
     },
     logout(state) {
       state.token = null;
       state.isLoggedIn = false;
-      localStorage.removeItem("token");
-      localStorage.removeItem("isPremium");
-      localStorage.removeItem("activePage");
-      localStorage.removeItem("limit");
     },
     setProfileName(state, action) {
       state.ProfileName = action.payload;

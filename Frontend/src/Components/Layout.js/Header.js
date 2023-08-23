@@ -26,6 +26,10 @@ const Header = () => {
     dispatch(expenseActions.setExpenses([]));
     localStorage.removeItem("year");
     localStorage.removeItem("month");
+    localStorage.removeItem("token");
+    localStorage.removeItem("isPremium");
+    localStorage.removeItem("activePage");
+    localStorage.removeItem("limit");
     dispatch(expenseActions.setIsForm(false));
     dispatch(expenseActions.setIsEdit(false));
     dispatch(expenseActions.setEditExpense({}));
